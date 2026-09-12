@@ -11,6 +11,8 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
+from tests.conftest import requires_powershell
+
 from specify_cli.events import (
     CANONICAL_EVENTS,
     EVENTS_DISPATCHER_REL,
@@ -1328,6 +1330,7 @@ class TestCommandRunner:
         argv = _resolve_event_command_argv(template, tmp_path, None)
         assert argv is None
 
+    @requires_powershell
     def test_ps_variant_prefixed_with_powershell_launcher(self, tmp_path):
         """S6: the ps variant prefixes argv with pwsh/powershell -File so
         subprocess.run(shell=False) can execute the .ps1 script."""

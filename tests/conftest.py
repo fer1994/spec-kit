@@ -67,6 +67,23 @@ requires_bash = pytest.mark.skipif(
 )
 
 
+def _has_powershell_launcher() -> bool:
+    """Check whether a PowerShell launcher is available on PATH.
+
+    Mirrors the runtime probe in ``specify_cli.events``: ``pwsh`` first,
+    then the Windows-only ``powershell``.  GitHub-hosted runners ship
+    PowerShell on every OS, but a local macOS or Linux checkout usually
+    does not, so tests asserting on a resolved launcher must skip rather
+    than fail.
+    """
+    return any(shutil.which(exe) for exe in ("pwsh", "powershell"))
+
+
+requires_powershell = pytest.mark.skipif(
+    not _has_powershell_launcher(), reason="no PowerShell launcher available"
+)
+
+
 def install_preset(
     project_root: Path, pack_id: str, provides: dict, priority: int = 10
 ) -> Path:
