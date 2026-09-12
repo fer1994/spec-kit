@@ -66,7 +66,7 @@ def test_build_is_deterministic(tmp_path: Path):
         # Same files, same order (sorted).
         assert a.namelist() == b.namelist()
         # Fixed timestamps + permissions make each member byte-identical.
-        for left, right in zip(a.infolist(), b.infolist()):
+        for left, right in zip(a.infolist(), b.infolist(), strict=True):
             assert left.date_time == right.date_time
             assert left.external_attr == right.external_attr
     # The whole artifact is byte-for-byte reproducible.

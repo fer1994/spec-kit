@@ -1663,7 +1663,7 @@ def test_extension_update_restores_command_symlinks(
     )
     command_link_texts = []
     try:
-        for alias_file, target in zip(alias_files, command_targets):
+        for alias_file, target in zip(alias_files, command_targets, strict=True):
             link_text = os.path.relpath(target, alias_file.parent)
             os.symlink(link_text, alias_file)
             command_link_texts.append(link_text)
@@ -1702,7 +1702,7 @@ def test_extension_update_restores_command_symlinks(
     assert result.exit_code == 1
     assert "Rollback successful" in result.output
     for alias_file, link_text in zip(
-        alias_files, command_link_texts
+        alias_files, command_link_texts, strict=True
     ):
         assert alias_file.is_symlink()
         assert os.readlink(alias_file) == link_text

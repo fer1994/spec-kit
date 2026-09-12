@@ -7,9 +7,13 @@ requires-python = ">=3.11"
 dependencies = [
     "typer>=0.24.0",
     "click>=8.2.1",
-    "rich",
+    # Matches the floor typer already imposes, so the direct dependency states
+    # its own requirement instead of inheriting one that can change upstream.
+    "rich>=13.8.0",
     "platformdirs",
-    "readchar",
+    # The interactive selector relies on the readchar 4.x `readchar.key`
+    # constants (see src/specify_cli/_console.py).
+    "readchar>=4.0.0",
     "pyyaml>=6.0",
     "packaging>=23.0",
     "pathspec>=0.12.0",
@@ -87,4 +91,8 @@ extend-select = [
     "S602",  # subprocess-popen-with-shell-equals-true
     "S604",  # call-with-shell-equals-true
     "S605",  # start-process-with-a-shell
+    # zip() without strict= silently truncates to the shortest input, so a
+    # length mismatch turns into an assertion that never runs instead of a
+    # failure. Pair-wise iteration must state which behaviour it wants.
+    "B905",  # zip-without-explicit-strict
 ]
